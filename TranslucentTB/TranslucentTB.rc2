@@ -29,7 +29,7 @@ IDR_POPUP_MENU MENUEX
 BEGIN
     POPUP ""
     BEGIN
-        POPUP "正常"
+        POPUP "常规"
         BEGIN
             MENUITEM "主题色",						IDM_REGULAR_COLOR
             MENUITEM "",                            0, MFT_SEPARATOR
