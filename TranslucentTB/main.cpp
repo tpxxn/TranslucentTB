@@ -1,4 +1,4 @@
-// Standard API
+﻿// Standard API
 #include <chrono>
 #include <mutex>
 #include <sstream>
@@ -224,10 +224,10 @@ bool CheckAndRunWelcome()
 		// String concatenation is hard OK
 		std::wostringstream message;
 		message <<
-			L"Welcome to " NAME L"!\n\n"
-			L"You can tweak the taskbar's appearance with the tray icon. If it's your cup of tea, you can also edit the configuration files, located at \"" <<
+			L"欢迎使用 " NAME L"!\n\n"
+			L"您可以使用任务栏图标来调整任务栏外观。如果您擅长，还可以直接编辑位于以下位置的配置文件: \"" <<
 			run.config_folder <<
-			L"\"\n\nDo you agree to the GPLv3 license?";
+			L"\"\n\n您同意 GPLv3 许可协议吗?";
 
 		if (MessageBox(Window::NullWindow, message.str().c_str(), NAME, MB_ICONINFORMATION | MB_YESNO | MB_SETFOREGROUND) != IDYES)
 		{
@@ -314,17 +314,17 @@ void RefreshAutostartMenu(HMENU menu, const Autostart::StartupState &state)
 	switch (state)
 	{
 	case Autostart::StartupState::DisabledByUser:
-		autostart_text = L"Startup has been disabled in Task Manager";
+		autostart_text = L"开机启动被任务管理器禁用";
 		break;
 	case Autostart::StartupState::DisabledByPolicy:
-		autostart_text = L"Startup has been disabled in Group Policy";
+		autostart_text = L"开机启动被组策略禁用";
 		break;
 	case Autostart::StartupState::EnabledByPolicy:
-		autostart_text = L"Startup has been enabled in Group Policy";
+		autostart_text = L"开机启动被组策略启用";
 		break;
 	case Autostart::StartupState::Enabled:
 	case Autostart::StartupState::Disabled:
-		autostart_text = L"Open at boot";
+		autostart_text = L"开机启动";
 	}
 	TrayContextMenu::ChangeItemText(menu, IDM_AUTOSTART, std::move(autostart_text));
 }
@@ -361,10 +361,10 @@ void RefreshMenu(HMENU menu)
 	const bool has_log = !Log::file().empty();
 	TrayContextMenu::RefreshBool(IDM_OPENLOG, menu, has_log, TrayContextMenu::ControlsEnabled);
 	TrayContextMenu::ChangeItemText(menu, IDM_OPENLOG, has_log
-		? L"Open log file"
+		? L"打开日志文件"
 		: Log::init_done()
-			? L"Error when initializing log file"
-			: L"Nothing has been logged yet"
+			? L"初始化日志文件错误"
+			: L"尚未记录任何内容"
 	);
 
 	TrayContextMenu::RefreshBool(IDM_REGULAR_COLOR,   menu,

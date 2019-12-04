@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StoreAssociation xmlns="http://schemas.microsoft.com/appx/2010/storeassociation">
-  <Publisher>CN=04797BBC-C7BB-462F-9B66-331C81E27C0E</Publisher>
-  <PublisherDisplayName>Charles Milette</PublisherDisplayName>
+  <Publisher>CN=9CE81905-8FA3-425F-AE78-BC58A25236F9</Publisher>
+  <PublisherDisplayName>tpxxn</PublisherDisplayName>
   <DeveloperAccountType>MSA</DeveloperAccountType>
   <GeneratePackageHash>http://www.w3.org/2001/04/xmlenc#sha256</GeneratePackageHash>
   <SupportedLocales>
@@ -241,6 +241,8 @@
     <Language Code="no-no" InMinimumRequirementSet="true" />
     <Language Code="nso" InMinimumRequirementSet="true" />
     <Language Code="nso-za" InMinimumRequirementSet="true" />
+    <Language Code="om" InMinimumRequirementSet="false" />
+    <Language Code="om-et" InMinimumRequirementSet="false" />
     <Language Code="or" InMinimumRequirementSet="true" />
     <Language Code="or-in" InMinimumRequirementSet="true" />
     <Language Code="pa" InMinimumRequirementSet="true" />
@@ -359,10 +361,13 @@
     <Language Code="zu-za" InMinimumRequirementSet="true" />
   </SupportedLocales>
   <ProductReservedInfo>
-    <MainPackageIdentityName>28017CharlesMilette.TranslucentTB</MainPackageIdentityName>
+    <MainPackageIdentityName>53454tpxxn.TranslucentTBbytpxxn</MainPackageIdentityName>
     <ReservedNames>
-      <ReservedName>TranslucentTB</ReservedName>
+      <ReservedName>TranslucentTB(汉化 by tpxxn)</ReservedName>
     </ReservedNames>
   </ProductReservedInfo>
-  <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9PF4KZ2VN4W9" />
+  <AccountPackageIdentityNames>
+    <MainPackageIdentityName>53454tpxxn.bytpxxn</MainPackageIdentityName>
+  </AccountPackageIdentityNames>
+  <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9N5W18JC9BG2" />
 </StoreAssociation>

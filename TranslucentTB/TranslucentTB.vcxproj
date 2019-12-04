@@ -5,6 +5,9 @@
     <RootNamespace>TranslucentTB</RootNamespace>
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <Import Project="..\common.props" />
   <ItemDefinitionGroup Label="Globals">
     <Link>
