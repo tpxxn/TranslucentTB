@@ -155,7 +155,7 @@ void GetPaths()
 {
 #ifndef STORE
 	AutoFree::CoTaskMem<wchar_t> appDataSafe;
-	ErrorHandle(SHGetKnownFolderPath(FOLDERID_RoamingAppData, KF_FLAG_DEFAULT, NULL, appDataSafe.put()), Error::Level::Fatal, L"Failed to determine configuration files locations!");
+	ErrorHandle(SHGetKnownFolderPath(FOLDERID_RoamingAppData, KF_FLAG_DEFAULT, NULL, appDataSafe.put()), Error::Level::Fatal, L"无法确定配置文件的位置！");
 	const wchar_t *appData = appDataSafe.get();
 #else
 	try
@@ -168,9 +168,9 @@ void GetPaths()
 	AutoFree::Local<wchar_t> configFile;
 	AutoFree::Local<wchar_t> excludeFile;
 
-	ErrorHandle(PathAllocCombine(appData, NAME, PATHCCH_ALLOW_LONG_PATHS, configFolder.put()), Error::Level::Fatal, L"Failed to combine AppData folder and application name!");
-	ErrorHandle(PathAllocCombine(configFolder.get(), CONFIG_FILE, PATHCCH_ALLOW_LONG_PATHS, configFile.put()), Error::Level::Fatal, L"Failed to combine config folder and config file!");
-	ErrorHandle(PathAllocCombine(configFolder.get(), EXCLUDE_FILE, PATHCCH_ALLOW_LONG_PATHS, excludeFile.put()), Error::Level::Fatal, L"Failed to combine config folder and exclude file!");
+	ErrorHandle(PathAllocCombine(appData, NAME, PATHCCH_ALLOW_LONG_PATHS, configFolder.put()), Error::Level::Fatal, L"无法合并 AppData 文件夹和应用程序名称！");
+	ErrorHandle(PathAllocCombine(configFolder.get(), CONFIG_FILE, PATHCCH_ALLOW_LONG_PATHS, configFile.put()), Error::Level::Fatal, L"无法合并配置文件夹和配置文件！");
+	ErrorHandle(PathAllocCombine(configFolder.get(), EXCLUDE_FILE, PATHCCH_ALLOW_LONG_PATHS, excludeFile.put()), Error::Level::Fatal, L"无法合并配置文件夹和排除文件！");
 
 	run.config_folder = configFolder.get();
 	run.config_file = configFile.get();
@@ -180,7 +180,7 @@ void GetPaths()
 	}
 	catch (const winrt::hresult_error &error)
 	{
-		ErrorHandle(error.code(), Error::Level::Fatal, L"Getting application folder paths failed!");
+		ErrorHandle(error.code(), Error::Level::Fatal, L"获取应用程序文件夹路径失败！");
 	}
 #endif
 }
@@ -191,13 +191,13 @@ void ApplyStock(const std::wstring &filename)
 	exeFolder_str.erase(exeFolder_str.find_last_of(LR"(/\)") + 1);
 
 	AutoFree::Local<wchar_t> stockFile;
-	if (!ErrorHandle(PathAllocCombine(exeFolder_str.c_str(), filename.c_str(), PATHCCH_ALLOW_LONG_PATHS, stockFile.put()), Error::Level::Error, L"Failed to combine executable folder and config file!"))
+	if (!ErrorHandle(PathAllocCombine(exeFolder_str.c_str(), filename.c_str(), PATHCCH_ALLOW_LONG_PATHS, stockFile.put()), Error::Level::Error, L"无法合并可执行文件文件夹和配置文件！"))
 	{
 		return;
 	}
 
 	AutoFree::Local<wchar_t> configFile;
-	if (!ErrorHandle(PathAllocCombine(run.config_folder.c_str(), filename.c_str(), PATHCCH_ALLOW_LONG_PATHS, configFile.put()), Error::Level::Error, L"Failed to combine config folder and config file!"))
+	if (!ErrorHandle(PathAllocCombine(run.config_folder.c_str(), filename.c_str(), PATHCCH_ALLOW_LONG_PATHS, configFile.put()), Error::Level::Error, L"无法合并配置文件夹和配置文件！"))
 	{
 		return;
 	}
@@ -206,14 +206,14 @@ void ApplyStock(const std::wstring &filename)
 	{
 		if (!CreateDirectory(run.config_folder.c_str(), NULL))
 		{
-			LastErrorHandle(Error::Level::Error, L"Creating configuration files directory failed!");
+			LastErrorHandle(Error::Level::Error, L"创建配置文件目录失败！");
 			return;
 		}
 	}
 
 	if (!CopyFile(stockFile.get(), configFile.get(), FALSE))
 	{
-		LastErrorHandle(Error::Level::Error, L"Copying stock configuration file failed!");
+		LastErrorHandle(Error::Level::Error, L"复制默认配置文件失败！");
 	}
 }
 
@@ -333,7 +333,7 @@ void RefreshMenu(HMENU menu)
 {
 	TrayContextMenu::RefreshBool(IDM_AUTOSTART, menu, false, TrayContextMenu::ControlsEnabled);
 	TrayContextMenu::RefreshBool(IDM_AUTOSTART, menu, false, TrayContextMenu::Toggle);
-	TrayContextMenu::ChangeItemText(menu, IDM_AUTOSTART, L"Querying startup state...");
+	TrayContextMenu::ChangeItemText(menu, IDM_AUTOSTART, L"正在查询启动状态...");
 	Autostart::GetStartupState().Completed([menu](auto info, ...)
 	{
 		RefreshAutostartMenu(menu, info.GetResults());

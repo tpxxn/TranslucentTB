@@ -1,4 +1,4 @@
-#include "win32.hpp"
+﻿#include "win32.hpp"
 #include "arch.h"
 #include <optional>
 #include <PathCch.h>
@@ -46,7 +46,7 @@ DWORD win32::PickerThreadProc(LPVOID data)
 	}
 	if (FAILED(hr))
 	{
-		ErrorHandle(hr, Error::Level::Error, L"An error occured in the color picker!");
+		ErrorHandle(hr, Error::Level::Error, L"Color picker 发生错误！");
 	}
 
 	return 0;
@@ -83,7 +83,7 @@ const std::wstring &win32::GetExeLocation()
 		}
 		else
 		{
-			LastErrorHandle(Error::Level::Fatal, L"Failed to determine executable location!");
+			LastErrorHandle(Error::Level::Fatal, L"无法确定可执行文件的位置！");
 		}
 	}
 
@@ -108,7 +108,7 @@ bool win32::IsAtLeastBuild(const uint32_t &buildNumber)
 		DWORD error = GetLastError();
 		if (error != ERROR_OLD_WIN_VERSION)
 		{
-			ErrorHandle(HRESULT_FROM_WIN32(error), Error::Level::Log, L"Error obtaining version info.");
+			ErrorHandle(HRESULT_FROM_WIN32(error), Error::Level::Log, L"获取版本信息时出错。");
 		}
 
 		return false;
@@ -134,7 +134,7 @@ bool win32::IsSingleInstance()
 			break;
 
 		default:
-			ErrorHandle(HRESULT_FROM_WIN32(error), Error::Level::Error, L"Failed to open app mutex!");
+			ErrorHandle(HRESULT_FROM_WIN32(error), Error::Level::Error, L"无法打开应用互斥锁！");
 			return true;
 		}
 	}
@@ -153,7 +153,7 @@ bool win32::IsDirectory(const std::wstring &directory)
 		if (error != ERROR_FILE_NOT_FOUND && error != ERROR_PATH_NOT_FOUND)
 		{
 			// This function gets called during log initialization, so avoid potential recursivity
-			ErrorHandle(HRESULT_FROM_WIN32(error), Error::Level::Debug, L"Failed to check if directory exists.");
+			ErrorHandle(HRESULT_FROM_WIN32(error), Error::Level::Debug, L"无法检查目录是否存在。");
 		}
 		return false;
 	}
@@ -171,7 +171,7 @@ bool win32::FileExists(const std::wstring &file)
 		DWORD error = GetLastError();
 		if (error != ERROR_FILE_NOT_FOUND && error != ERROR_PATH_NOT_FOUND)
 		{
-			ErrorHandle(HRESULT_FROM_WIN32(error), Error::Level::Log, L"Failed to check if file exists.");
+			ErrorHandle(HRESULT_FROM_WIN32(error), Error::Level::Log, L"无法检查文件是否存在。");
 		}
 		return false;
 	}
@@ -186,13 +186,13 @@ void win32::CopyToClipboard(const std::wstring &text)
 	ClipboardContext context;
 	if (!context)
 	{
-		LastErrorHandle(Error::Level::Error, L"Failed to open clipboard.");
+		LastErrorHandle(Error::Level::Error, L"无法打开剪贴板");
 		return;
 	}
 
 	if (!EmptyClipboard())
 	{
-		LastErrorHandle(Error::Level::Error, L"Failed to empty clipboard.");
+		LastErrorHandle(Error::Level::Error, L"无法清空剪贴板。");
 		return;
 	}
 
@@ -200,7 +200,7 @@ void win32::CopyToClipboard(const std::wstring &text)
 	auto data = AutoFree::Global<wchar_t>::Alloc(text_size);
 	if (!data)
 	{
-		LastErrorHandle(Error::Level::Error, L"Failed to allocate memory for the clipboard.");
+		LastErrorHandle(Error::Level::Error, L"无法为剪贴板分配内存。");
 		return;
 	}
 
@@ -208,7 +208,7 @@ void win32::CopyToClipboard(const std::wstring &text)
 
 	if (!SetClipboardData(CF_UNICODETEXT, data.get()))
 	{
-		LastErrorHandle(Error::Level::Error, L"Failed to copy data to clipboard.");
+		LastErrorHandle(Error::Level::Error, L"无法将数据复制到剪贴板。");
 		return;
 	}
 }
@@ -235,15 +235,15 @@ void win32::EditFile(const std::wstring &file)
 
 		if (WaitForSingleObject(hprocess.get(), INFINITE) == WAIT_FAILED)
 		{
-			LastErrorHandle(Error::Level::Log, L"Failed to wait for text editor close.");
+			LastErrorHandle(Error::Level::Log, L"无法等待文本编辑器关闭。");
 		}
 	}
 	else
 	{
 		std::wstring boxbuffer =
-			L"Failed to open file \"" + file + L"\"." +
+			L"打开文件 \"" + file + L"\" 失败。" +
 			L"\n\n" + Error::ExceptionFromHRESULT(HRESULT_FROM_WIN32(GetLastError())) +
-			L"\n\nCopy the file location to the clipboard?";
+			L"\n\n复制文件路径到剪贴板？";
 
 		if (MessageBox(Window::NullWindow, boxbuffer.c_str(), NAME L" - Error", MB_ICONWARNING | MB_YESNO | MB_SETFOREGROUND) == IDYES)
 		{
@@ -271,9 +271,9 @@ void win32::OpenLink(const std::wstring &link)
 	if (!ShellExecuteEx(&info))
 	{
 		std::wstring boxbuffer =
-			L"Failed to open URL \"" + link + L"\"." +
+			L"打开链接 \"" + link + L"\" 失败。" +
 			L"\n\n" + Error::ExceptionFromHRESULT(HRESULT_FROM_WIN32(GetLastError())) +
-			L"\n\nCopy the URL to the clipboard?";
+			L"\n\n复制链接到剪贴板？";
 
 		if (MessageBox(Window::NullWindow, boxbuffer.c_str(), NAME L" - Error", MB_ICONWARNING | MB_YESNO | MB_SETFOREGROUND) == IDYES)
 		{
@@ -299,7 +299,7 @@ DWORD win32::PickColor(uint32_t &color)
 	}
 	else
 	{
-		LastErrorHandle(Error::Level::Error, L"Failed to spawn color picker thread!");
+		LastErrorHandle(Error::Level::Error, L"无法生成 Color picker 线程！");
 		return 0;
 	}
 }
@@ -336,12 +336,12 @@ void win32::HardenProcess()
 		aslr_policy.DisallowStrippedImages = true;
 		if (!SetProcessMitigationPolicy(ProcessASLRPolicy, &aslr_policy, sizeof(aslr_policy)))
 		{
-			LastErrorHandle(Error::Level::Log, L"Couldn't disallow stripped images.");
+			LastErrorHandle(Error::Level::Log, L"无法删除图像。");
 		}
 	}
 	else
 	{
-		LastErrorHandle(Error::Level::Log, L"Couldn't get current ASLR policy.");
+		LastErrorHandle(Error::Level::Log, L"无法获取当前的 ASLR 策略。");
 	}
 
 	PROCESS_MITIGATION_DYNAMIC_CODE_POLICY code_policy {};
@@ -350,7 +350,7 @@ void win32::HardenProcess()
 	code_policy.AllowRemoteDowngrade = false;
 	if (!SetProcessMitigationPolicy(ProcessDynamicCodePolicy, &code_policy, sizeof(code_policy)))
 	{
-		LastErrorHandle(Error::Level::Log, L"Couldn't disable dynamic code generation.");
+		LastErrorHandle(Error::Level::Log, L"无法禁用动态代码生成。");
 	}
 
 	PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY handle_policy {};
@@ -358,21 +358,21 @@ void win32::HardenProcess()
 	handle_policy.HandleExceptionsPermanentlyEnabled = true;
 	if (!SetProcessMitigationPolicy(ProcessStrictHandleCheckPolicy, &handle_policy, sizeof(handle_policy)))
 	{
-		LastErrorHandle(Error::Level::Log, L"Couldn't enable strict handle checks.");
+		LastErrorHandle(Error::Level::Log, L"无法启用严格的句柄检查。");
 	}
 
 	PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY extension_policy {};
 	extension_policy.DisableExtensionPoints = true;
 	if (!SetProcessMitigationPolicy(ProcessExtensionPointDisablePolicy, &extension_policy, sizeof(extension_policy)))
 	{
-		LastErrorHandle(Error::Level::Log, L"Couldn't disable extension point DLLs.");
+		LastErrorHandle(Error::Level::Log, L"无法禁用扩展点 DLL。");
 	}
 
 	PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY signature_policy {};
 	signature_policy.MitigationOptIn = true;
 	if (!SetProcessMitigationPolicy(ProcessSignaturePolicy, &signature_policy, sizeof(signature_policy)))
 	{
-		LastErrorHandle(Error::Level::Log, L"Couldn't enable image signature enforcement.");
+		LastErrorHandle(Error::Level::Log, L"无法启用图像强制签名。");
 	}
 
 
@@ -388,12 +388,12 @@ void win32::HardenProcess()
 	}
 	else
 	{
-		LastErrorHandle(Error::Level::Log, L"Unable to get volume path name.");
+		LastErrorHandle(Error::Level::Log, L"无法获取卷路径名。");
 	}
 
 	if (!SetProcessMitigationPolicy(ProcessImageLoadPolicy, &load_policy, sizeof(load_policy)))
 	{
-		LastErrorHandle(Error::Level::Log, L"Couldn't set image load policy.");
+		LastErrorHandle(Error::Level::Log, L"无法设置图片加载策略。");
 	}
 }
 
