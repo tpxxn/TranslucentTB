@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10" IgnorableNamespaces="rescap">
-  <Identity Name="53454tpxxn.TranslucentTBbytpxxn" ProcessorArchitecture="x86" Publisher="CN=9CE81905-8FA3-425F-AE78-BC58A25236F9" Version="1.0.3.0" />
+  <Identity Name="53454tpxxn.TranslucentTBbytpxxn" ProcessorArchitecture="x86" Publisher="CN=tpxxn" Version="1.0.3.0" />
   <Properties>
     <DisplayName>TranslucentTB(汉化 by tpxxn)</DisplayName>
     <PublisherDisplayName>tpxxn</PublisherDisplayName>
